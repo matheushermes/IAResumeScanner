@@ -67,15 +67,5 @@ cp .env.example .env
 # Edite o .env com as configurações de:
 # - Banco de dados (PostgreSQL ou Firebase)
 # - Endpoint local do Ollama
-go run main.g
-```
-
-### 🌐 Frontend (Next.js)
-```bash
-cd frontend
-npm install
-npm run dev
-# - ou, se estiver usando Yarn:
-yarn install
-yarn dev
+go run main.go
 ```
