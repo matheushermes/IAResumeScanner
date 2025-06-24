@@ -1,12 +1,12 @@
 package main
 
 import (
-	"github.com/matheushermes/IAResumeScanner/configs"
 	"github.com/matheushermes/IAResumeScanner/internal/server"
+
+	_ "github.com/matheushermes/IAResumeScanner/init"
 )
 
 func main() {
-	configs.LoadingEnvironmentVariables()
 	server := server.NewServer()
 	server.RunServer()
 }

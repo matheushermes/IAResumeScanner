@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+//UploadFile recebe um arquivo enviado pelo usuário;
 func UploadFile(c *gin.Context) {
 	fileHeader, err := c.FormFile("file")
 	if err != nil {
