@@ -11,6 +11,7 @@ func ConfigRouter(router *gin.Engine) *gin.Engine {
 		scanner := main.Group("scanner")
 		{
 			scanner.POST("/upload", controllers.UploadFile)
+			scanner.POST("/match", controllers.MatchCV)
 		}
 	}
 
