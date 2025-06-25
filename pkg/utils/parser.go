@@ -11,6 +11,7 @@ import (
 	"github.com/unidoc/unipdf/v4/model"
 )
 
+//ExtractTextFromCV identifica a extensão do arquivo de currículo e delega a extração de texto para a função correspondente;
 func ExtractTextFromCV(filePath string) (string, error) {
 	ext := strings.ToLower(filepath.Ext(filePath))
 
@@ -24,6 +25,7 @@ func ExtractTextFromCV(filePath string) (string, error) {
 	}
 }
 
+//extractTextFromPDF abre um arquivo PDF e extrai todo o conteúdo textual, página por página, utilizando a biblioteca UniPDF;
 func extractTextFromPDF(filePath string) (string, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
@@ -76,6 +78,7 @@ func extractTextFromPDF(filePath string) (string, error) {
 	return sb.String(), nil
 }
 
+//extractTextFromDOCX abre um arquivo .docx (Word) e extrai o texto de todos os parágrafos, concatenando o conteúdo de cada run (bloco de texto com formatação);
 func extractTextFromDOCX(filePath string) (string, error) {
 	doc, err := document.Open(filePath)
 	if err != nil {
