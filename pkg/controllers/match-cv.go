@@ -6,6 +6,7 @@ import (
 	"path/filepath"
 
 	"github.com/gin-gonic/gin"
+	"github.com/matheushermes/IAResumeScanner/pkg/models"
 	"github.com/matheushermes/IAResumeScanner/pkg/utils"
 )
 
@@ -32,10 +33,10 @@ func MatchCV(c *gin.Context) {
 		c.JSON(500, gin.H{
 			"error": "Erro ao obter o arquivo do CV: " + err.Error(),
 		})
-	return
-}
+		return
+	}
 
-	text, err := utils.ExtractTextFromCV(filePath)
+	cvText, err := utils.ExtractTextFromCV(filePath)
 	if err != nil {
 		c.JSON(500, gin.H{
 			"error": "Erro ao extrair texto do CV: " + err.Error(),
@@ -43,8 +44,24 @@ func MatchCV(c *gin.Context) {
 		return
 	}
 
+	var jobDescription models.Job
+	if err := c.ShouldBindJSON(&jobDescription); err != nil {
+		c.JSON(422, gin.H {
+			"error": err.Error(),
+		})
+		return
+	}
 
-	c.JSON(200, gin.H {
-		"message": text,
-	})
+	prompt := utils.BuildPromptForAnalysis(cvText, jobDescription.JobDescription)
+
+	resultAnalysisLLM, err := utils.SendPromptToLLM(prompt)
+	if err != nil {
+		c.JSON(500, gin.H {
+			"error": "Erro ao interpretar JSON da LLM",
+			"rawText": err.Error(),
+		})
+		return
+	}
+
+	c.JSON(200, resultAnalysisLLM)
 }

@@ -3,6 +3,8 @@ package server
 import (
 	"fmt"
 	"log"
+	"net/http"
+	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -29,10 +31,19 @@ func (s *Server) RunServer() {
 			AllowHeaders:    []string{"Origin", "Content-Type", "Authorization"},
 			ExposeHeaders:   []string{"Content-Length"},
 	}
-
 	s.server.Use(cors.New(corsConfig))
+
 	router := routes.ConfigRouter(s.server)
 
+	//Configurando timeout;
+	srv := &http.Server{
+		Addr:         ":" + s.port,
+		Handler:      router,
+		ReadTimeout:  10 * time.Minute,
+		WriteTimeout: 10 * time.Minute,
+		IdleTimeout:  10 * time.Minute,
+	}
+
 	fmt.Printf("Server run on port %s", s.port)
-	log.Fatal(router.Run(":" + s.port))
+	log.Fatal(srv.ListenAndServe())
 }

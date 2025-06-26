@@ -29,47 +29,47 @@ func ExtractTextFromCV(filePath string) (string, error) {
 func extractTextFromPDF(filePath string) (string, error) {
 	f, err := os.Open(filePath)
 	if err != nil {
-		return "", fmt.Errorf("Erro ao abrir o arquivo PDF: %w", err)
+		return "", fmt.Errorf("erro ao abrir o arquivo PDF: %w", err)
 	}
 	defer f.Close()
 
 	reader, err := model.NewPdfReader(f)
 	if err != nil {
-		return "", fmt.Errorf("Erro ao criar o leitor PDF: %w", err)
+		return "", fmt.Errorf("erro ao criar o leitor PDF: %w", err)
 	}
 
 	isEncrypted, err := reader.IsEncrypted()
 	if err != nil {
-		return "", fmt.Errorf("Erro ao verificar criptografia do PDF: %w", err)
+		return "", fmt.Errorf("erro ao verificar criptografia do PDF: %w", err)
 	}
 	if isEncrypted {
 		ok, err := reader.Decrypt([]byte(""))
 		if err != nil {
-			return "", fmt.Errorf("Erro ao descriptografar PDF: %w", err)
+			return "", fmt.Errorf("erro ao descriptografar PDF: %w", err)
 		}
 		if !ok {
-			return "", fmt.Errorf("Falha ao descriptografar PDF: senha incorreta ou não suportado")
+			return "", fmt.Errorf("falha ao descriptografar PDF: senha incorreta ou não suportado")
 		}
 	}
 
 	numPages, err := reader.GetNumPages()
 	if err != nil {
-		return "", fmt.Errorf("Erro ao obter número de páginas: %w", err)
+		return "", fmt.Errorf("erro ao obter número de páginas: %w", err)
 	}
 
 	var sb strings.Builder
 	for i := 1; i <= numPages; i++ {
 		page, err := reader.GetPage(i)
 		if err != nil {
-			return "", fmt.Errorf("Erro ao obter página %d: %w", i, err)
+			return "", fmt.Errorf("erro ao obter página %d: %w", i, err)
 		}
 		ex, err := extractor.New(page)
 		if err != nil {
-			return "", fmt.Errorf("Erro ao criar extractor: %w", err)
+			return "", fmt.Errorf("erro ao criar extractor: %w", err)
 		}
 		text, err := ex.ExtractText()
 		if err != nil {
-			return "", fmt.Errorf("Erro ao extrair texto da página %d: %w", i, err)
+			return "", fmt.Errorf("erro ao extrair texto da página %d: %w", i, err)
 		}
 
 		sb.WriteString(text + "\n")
