@@ -1,0 +1,93 @@
+definitions:
+  models.Job:
+    properties:
+      description:
+        type: string
+    type: object
+  utils.AnalysisLLM:
+    properties:
+      feedback_geral:
+        type: string
+      pontos_negativos:
+        items:
+          type: string
+        type: array
+      pontos_positivos:
+        items:
+          type: string
+        type: array
+      recomendacoes:
+        items:
+          type: string
+        type: array
+      score:
+        type: number
+    type: object
+info:
+  contact: {}
+paths:
+  /api/v1/scanner/match:
+    post:
+      consumes:
+      - application/json
+      description: Faz análise de compatibilidade entre currículo enviado e a descrição
+        da vaga, usando LLM local
+      parameters:
+      - description: Descrição da Vaga
+        in: body
+        name: job
+        required: true
+        schema:
+          $ref: '#/definitions/models.Job'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/utils.AnalysisLLM'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Analisa o currículo em relação à vaga
+      tags:
+      - Scanner
+  /api/v1/scanner/upload:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Faz upload de um arquivo PDF ou DOCX contendo o currículo do candidato
+      parameters:
+      - description: Arquivo do currículo (.pdf ou .docx)
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Upload de currículo
+      tags:
+      - Scanner
+swagger: "2.0"

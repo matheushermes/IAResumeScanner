@@ -1,0 +1,143 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "contact": {}
+    },
+    "paths": {
+        "/api/v1/scanner/match": {
+            "post": {
+                "description": "Faz análise de compatibilidade entre currículo enviado e a descrição da vaga, usando LLM local",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Scanner"
+                ],
+                "summary": "Analisa o currículo em relação à vaga",
+                "parameters": [
+                    {
+                        "description": "Descrição da Vaga",
+                        "name": "job",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.Job"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/utils.AnalysisLLM"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/scanner/upload": {
+            "post": {
+                "description": "Faz upload de um arquivo PDF ou DOCX contendo o currículo do candidato",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Scanner"
+                ],
+                "summary": "Upload de currículo",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "Arquivo do currículo (.pdf ou .docx)",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "object",
+                            "additionalProperties": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "models.Job": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string"
+                }
+            }
+        },
+        "utils.AnalysisLLM": {
+            "type": "object",
+            "properties": {
+                "feedback_geral": {
+                    "type": "string"
+                },
+                "pontos_negativos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "pontos_positivos": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "recomendacoes": {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "score": {
+                    "type": "number"
+                }
+            }
+        }
+    }
+}

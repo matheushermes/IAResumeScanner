@@ -27,6 +27,15 @@ func GetFirstFileFromUploads() (string, error) {
 }
 
 //MatchCV compara o conteúdo de um currículo com os requisitos de uma vaga, retornando uma pontuação e compatibilidade do candidato com a vaga;
+// @Summary Analisa o currículo em relação à vaga
+// @Description Faz análise de compatibilidade entre currículo enviado e a descrição da vaga, usando LLM local
+// @Tags Scanner
+// @Accept json
+// @Produce json
+// @Param job body models.Job true "Descrição da Vaga"
+// @Success 200 {object} utils.AnalysisLLM
+// @Failure 400 {object} map[string]string
+// @Router /api/v1/scanner/match [post]
 func MatchCV(c *gin.Context) {
 	filePath, err := GetFirstFileFromUploads()
 	if err != nil {

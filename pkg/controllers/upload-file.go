@@ -9,6 +9,16 @@ import (
 )
 
 //UploadFile recebe um arquivo enviado pelo usuário;
+// @Summary Upload de currículo
+// @Description Faz upload de um arquivo PDF ou DOCX contendo o currículo do candidato
+// @Tags Scanner
+// @Accept multipart/form-data
+// @Produce json
+// @Param file formData file true "Arquivo do currículo (.pdf ou .docx)"
+// @Success 200 {object} map[string]string
+// @Failure 400 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /api/v1/scanner/upload [post]
 func UploadFile(c *gin.Context) {
 	fileHeader, err := c.FormFile("file")
 	if err != nil {
