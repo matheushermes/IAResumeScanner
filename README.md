@@ -130,7 +130,6 @@ POST /api/v1/scanner/match
 - <b>Descrição:</b> Recebe a descrição completa da vaga e retorna uma avaliação da compatibilidade com o currículo enviado anteriormente.
 
 <b><i>Corpo da Requisição (JSON):</b></i>
-
 ```json
 {
   "jobDescription": "Descrição completa da vaga"
@@ -138,7 +137,6 @@ POST /api/v1/scanner/match
 ```
 
 <b><i>Resposta esperada:</b></i>
-
 ```json
 {
   "score": 85,
